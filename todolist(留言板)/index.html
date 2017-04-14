@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="js/bootstrap.min.css" />
+		<script src="js/jquery-1.8.3.min.js"></script>
+		<script src="js/bootstrap.js"></script>
+	</head>
+	<body>
+		<div class="container" id="box">
+			<form action="" role="form">
+				<div class="form-group">
+					<label for="username">用户名:</label>
+					<input type="text" id="username" class="form-control" placeholder="输入用户名" v-model="username"/>
+				</div>
+				<div class="form-group">
+					<label for="age" >年龄：</label>
+					<input type="text" id="age" class="form-control" v-model="age" placeholder="请输入年龄"/>
+				</div>
+				<div class="form-group">
+					<input type="button" value="添加" class="btn btn-primary" @click="add()"/>
+					<input type="reset" value="重置" class="btn btn-danger"/>
+					
+				</div>
+			</form>
+			<hr />
+			<table class="table table-bordered table-hover">
+				<caption class="h4 text-info">用户信息表</caption>
+				<tr class="text-danger">
+					<th class="text-center">序号</th>
+					<th class="text-center">名字</th>
+					<th class="text-center">年龄</th>
+					<th class="text-center">操作</th>
+				</tr>
+				<tr class="text-center" v-for="item in myData">
+					<td>{{$index+1}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.age}}</td>
+					<td>
+						<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#layer" @click="nowIndex=$index">删除</button>
+					</td>
+				</tr>
+				<tr v-show="myData.length!=0">
+					<td colspan="4" class="">
+						<button class="btn btn-danger btn-sm" data-toggle="modal" @click="nowIndex=-2" data-target="#layer" >删除全部</button>
+					</td>
+				</tr>
+				<tr v-show="myData.length==0">
+					<td colspan="4" class="text-center text-muted">
+						<p>暂无数据...</p>
+					</td>
+				</tr>
+			</table>
+			<!--模态框-->
+			<div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<span>&times</span>
+							</button>
+							<h4 class="modal-title" id="make">确认要删除吗？</h4>
+						</div>
+						<div class="modal-body text-right">
+							<button type="button" data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+							<button type="button" data-dismiss="modal" class="btn btn-danger btn-sm" @click="deleteMsg(nowIndex)">确认</button>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		<script src="js/vue.js"></script>
+		<script>
+			$(function () {
+                new Vue({
+                    el:'#box',
+                    data:{
+                        myData:[],
+						username:'',
+						age:'',
+						nowIndex:-100
+
+                    },
+                    methods:{
+                        add:function(){
+                            this.myData.push({
+								name:this.username,
+								age:this.age
+							})
+							this.username='';
+                            this.age='';
+                        },
+						deleteMsg:function (n) {
+							if (n==-2){
+							    $('#make').text('确认要删除全部吗？')
+							    this.myData=[];
+
+							}else {
+							    $('#make').text('确认要删除吗？')
+//                                $('.modal-title').text('确认删除吗？')
+                                this.myData.splice(n,1);
+
+                            }
+                        }
+
+
+                    }
+                })
+            })
+
+
+		</script>
+	</body>
+</html>
